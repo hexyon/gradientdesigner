@@ -460,17 +460,19 @@ for (let color of topColors) {
 }	
 });
 // Color Input Event Listeners
-document.getElementById('color1Input').addEventListener('input', function() {
-    randomColor1 = this.value;
-    document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
-    document.getElementById('color1Code').textContent = this.value.toUpperCase();
-});
+    document.getElementById('color1Input').addEventListener('input', function() {
+        randomColor1 = this.value;
+        document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
+        document.getElementById('hexColor1Input').value = this.value; // Ensure hex input is updated
+        document.getElementById('color1Code').textContent = this.value.toUpperCase();
+    });
 
-document.getElementById('color2Input').addEventListener('input', function() {
-    randomColor2 = this.value;
-    document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
-    document.getElementById('color2Code').textContent = this.value.toUpperCase();
-});
+    document.getElementById('color2Input').addEventListener('input', function() {
+        randomColor2 = this.value;
+        document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
+        document.getElementById('hexColor2Input').value = this.value; // Ensure hex input is updated
+        document.getElementById('color2Code').textContent = this.value.toUpperCase();
+    });
 
 document.getElementById('randomButton').addEventListener('click', function() {
     // Generate random colors
@@ -525,6 +527,26 @@ document.getElementById('color2Input').addEventListener('input', function(event)
     document.getElementById('hexColor2Input').value = color2;
     document.getElementById('color2Code').textContent = color2.toUpperCase();
 });
+
+    document.getElementById('hexColor1Input').addEventListener('input', function() {
+        if (!this.value.startsWith('#')) {
+            this.value = '#' + this.value;
+        }
+        randomColor1 = this.value;
+        document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
+        document.getElementById('color1Code').textContent = this.value.toUpperCase();
+        document.getElementById('color1Input').value = this.value; // Update color input
+    });
+
+    document.getElementById('hexColor2Input').addEventListener('input', function() {
+        if (!this.value.startsWith('#')) {
+            this.value = '#' + this.value;
+        }
+        randomColor2 = this.value;
+        document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
+        document.getElementById('color2Code').textContent = this.value.toUpperCase();
+        document.getElementById('color2Input').value = this.value; // Update color input
+    });
 
     </script>
 
