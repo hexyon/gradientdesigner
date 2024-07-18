@@ -181,188 +181,136 @@ body {
     <button id="randomButton" class="controlButton">Random</button>
     <button id="downloadButton" class="controlButton">Download</button> 
 </div>
-    <div id="colorSelectionScreen">
-        <div class="colorContainer">
-            <div id="color1Picker" class="colorPicker">
-                <input id="color1Input" type="color">
-            </div>
-            <input id="hexColor1Input" class="colorInput" type="text" placeholder="#FFFFFF" maxlength="7">
-            <button id="copyColor1Button" class="copyButton"><span id="color1Code"></span></button>
-            <span id="tickMark1"></span>
+<div id="colorSelectionScreen">
+    <div class="colorContainer">
+        <div id="color1Picker" class="colorPicker">
+            <input id="color1Input" type="color">
         </div>
-        <div class="colorContainer">
-            <div id="color2Picker" class="colorPicker">
-                <input id="color2Input" type="color">
-            </div>
-            <input id="hexColor2Input" class="colorInput" type="text" placeholder="#FFFFFF" maxlength="7">
-            <button id="copyColor2Button" class="copyButton"><span id="color2Code"></span></button>
-            <span id="tickMark2"></span>
-        </div>
+        <input id="hexColor1Input" class="colorInput" type="text" placeholder="#FFFFFF" maxlength="7">
+        <button id="copyColor1Button" class="copyButton"><span id="color1Code"></span></button>
+        <span id="tickMark1"></span>
     </div>
+    <div class="colorContainer">
+        <div id="color2Picker" class="colorPicker">
+            <input id="color2Input" type="color">
+        </div>
+        <input id="hexColor2Input" class="colorInput" type="text" placeholder="#FFFFFF" maxlength="7">
+        <button id="copyColor2Button" class="copyButton"><span id="color2Code"></span></button>
+        <span id="tickMark2"></span>
+    </div>
+</div>
 
-    <div id="photoColors">
-        <input type="file" id="photoUpload" accept="image/*" style="display: none;">
-        <button id="uploadButton" class="controlButton">Upload Photo</button>
-        <img id="photoThumbnail" src="" alt="Photo Thumbnail">
-        <button id="fetchColorsButton" class="controlButton" style="display: none;">Fetch Colors</button>
-        <div id="colorPalette" style="display: flex; justify-content: space-between; margin-top: 20px;"></div>
+<div id="photoColors">
+    <input type="file" id="photoUpload" accept="image/*" style="display: none;">
+    <button id="uploadButton" class="controlButton">Upload Photo</button>
+    <img id="photoThumbnail" src="" alt="Photo Thumbnail" style="display: none;">
+    <button id="fetchColorsButton" class="controlButton" style="display: none;">Fetch Colors</button>
+    <div id="colorPalette" style="display: flex; justify-content: space-between; margin-top: 20px;">
+        <div class="paletteColor"></div>
+        <div class="paletteColor"></div>
     </div>
-    <script>
+</div>
+
+<script>
         let intervalId;
         let randomColor1 = '#ffffff';
         let randomColor2 = '#ffffff';
 
-        function generateRandomNumber() {
-            let min = Math.ceil(1e11);
-            let max = Math.floor(1e12);
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-
-// Start Button Functionality
-document.getElementById('startButton').addEventListener('click', function() {
-    if (intervalId) {
-        clearInterval(intervalId);
+    function generateRandomColor() {
+        return '#' + ("000000" + Math.floor(Math.random() * 16777215).toString(16)).slice(-6);
     }
 
-    intervalId = setInterval(function() {
-        randomColor1 = '#' + generateRandomNumber().toString(16).substring(0, 6);
-        randomColor2 = '#' + generateRandomNumber().toString(16).substring(0, 6);
+    function updateColors(color1, color2) {
+        document.body.style.background = `linear-gradient(90deg, ${color1}, ${color2})`;
+        document.getElementById('color1Code').textContent = color1.toUpperCase();
+        document.getElementById('color2Code').textContent = color2.toUpperCase();
+        document.getElementById('hexColor1Input').value = color1;
+        document.getElementById('hexColor2Input').value = color2;
+        document.getElementById('color1Input').value = color1;
+        document.getElementById('color2Input').value = color2;
+    }
 
-        document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
-        document.body.style.animationDuration = '0.3s';  // Set the animation duration to 1.5 seconds
+    function copyColor(colorCode, tickMarkId) {
+        navigator.clipboard.writeText(colorCode);
+        let tickMarkElement = document.getElementById(tickMarkId);
+        tickMarkElement.textContent = '✓';
+        setTimeout(() => {
+            tickMarkElement.textContent = '';
+        }, 3000);
+    }
 
-        document.getElementById('color1Code').textContent = randomColor1.toUpperCase();
-        document.getElementById('color2Code').textContent = randomColor2.toUpperCase();
-
-        document.getElementById('hexColor1Input').value = randomColor1;
-        document.getElementById('hexColor2Input').value = randomColor2;
-    }, 300);
-});
-
-
-        // Stop Button Functionality
-        document.getElementById('stopButton').addEventListener('click', function() {
-            if (intervalId) {
-                clearInterval(intervalId);
-            }
-
-        });
-
-        // Download Button Functionality
-function downloadBackground() {
-    let canvas = document.createElement('canvas');
-    canvas.width = 1920;
-    canvas.height = 1080;
-    let context = canvas.getContext('2d');
-
-    // Get the current background gradient colors
-    let gradientColors = window.getComputedStyle(document.body).getPropertyValue('background-image').match(/rgb\([^)]+\)/g);
-
-    // Convert RGB strings to hex values
-    let hexColors = gradientColors.map(rgbString => {
-        let rgb = rgbString.match(/\d+/g).map(Number);
-        return '#' + rgb.map(x => x.toString(16).padStart(2, '0')).join('');
+    document.getElementById('startButton').addEventListener('click', function() {
+        if (intervalId) clearInterval(intervalId);
+        intervalId = setInterval(() => {
+            randomColor1 = generateRandomColor();
+            randomColor2 = generateRandomColor();
+            updateColors(randomColor1, randomColor2);
+        }, 300);
     });
 
-    let gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < hexColors.length; i++) {
-        gradient.addColorStop(i / (hexColors.length - 1), hexColors[i]);
-    }
+    document.getElementById('stopButton').addEventListener('click', function() {
+        if (intervalId) clearInterval(intervalId);
+    });
 
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    document.getElementById('downloadButton').addEventListener('click', function() {
+        let canvas = document.createElement('canvas');
+        canvas.width = 1920;
+        canvas.height = 1080;
+        let context = canvas.getContext('2d');
+        let gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, randomColor1);
+        gradient.addColorStop(1, randomColor2);
+        context.fillStyle = gradient;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        let link = document.createElement('a');
+        link.download = 'background.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    });
 
-    let link = document.createElement('a');
-    link.download = 'background.png';
-    link.href = canvas.toDataURL();
-    link.click();
-}
+    document.getElementById('colorsButton').addEventListener('click', function() {
+        let colorSelectionScreen = document.getElementById('colorSelectionScreen');
+        let photoColors = document.getElementById('photoColors');
+        let isDisplayed = colorSelectionScreen.style.display === 'flex';
+        colorSelectionScreen.style.display = isDisplayed ? 'none' : 'flex';
+        photoColors.style.display = isDisplayed ? 'none' : 'flex';
+    });
 
-        document.getElementById('downloadButton').addEventListener('click', downloadBackground);
+    document.getElementById('hexColor1Input').addEventListener('input', function() {
+        let color = this.value.startsWith('#') ? this.value : '#' + this.value;
+        randomColor1 = color;
+        updateColors(randomColor1, randomColor2);
+    });
 
-        // Colors Button Functionality
-document.getElementById('colorsButton').addEventListener('click', function() {
-    let colorSelectionScreen = document.getElementById('colorSelectionScreen');
-    let photoColors = document.getElementById('photoColors');
-    
-    // Check if the color selection screens are currently displayed
-    if (colorSelectionScreen.style.display === 'flex' && photoColors.style.display === 'flex') {
-        // If they are displayed, hide them
-        colorSelectionScreen.style.display = 'none';
-        photoColors.style.display = 'none';
-    } else {
-        // If they are hidden, display them
-        colorSelectionScreen.style.display = 'flex';
-        photoColors.style.display = 'flex';
-    }
-});
-        // Color Input Event Listeners
+    document.getElementById('hexColor2Input').addEventListener('input', function() {
+        let color = this.value.startsWith('#') ? this.value : '#' + this.value;
+        randomColor2 = color;
+        updateColors(randomColor1, randomColor2);
+    });
 
+    document.getElementById('color1Input').addEventListener('input', function() {
+        randomColor1 = this.value;
+        updateColors(randomColor1, randomColor2);
+    });
 
-        // ... (Similar event listeners for other color inputs)
+    document.getElementById('color2Input').addEventListener('input', function() {
+        randomColor2 = this.value;
+        updateColors(randomColor1, randomColor2);
+    });
 
-        // Copy Color Button Event Listeners
-        document.getElementById('copyColor1Button').addEventListener('click', function() {
-            navigator.clipboard.writeText(randomColor1);
-            // ... (Tick mark display logic)
-        });
+    document.getElementById('copyColor1Button').addEventListener('click', function() {
+        copyColor(randomColor1, 'tickMark1');
+    });
 
-        // ... (Similar event listeners for other copy color buttons)
+    document.getElementById('copyColor2Button').addEventListener('click', function() {
+        copyColor(randomColor2, 'tickMark2');
+    });
 
-        // Hex Color Input Event Listeners
-document.getElementById('hexColor1Input').addEventListener('input', function() {
-    if (!this.value.startsWith('#')) {
-        this.value = '#' + this.value;
-    }
-    randomColor1 = this.value;
-    document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
-    document.getElementById('color1Code').textContent = this.value.toUpperCase();
-});
-
-        // ... (Similar event listeners for other hex color inputs)
-
-<!-- Add event listeners for the new color inputs -->
-
-document.getElementById('hexColor1Input').addEventListener('input', function() {
-    if (!this.value.startsWith('#')) {
-        this.value = '#' + this.value;
-    }
-    randomColor1 = this.value;
-    document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
-    document.getElementById('color1Code').textContent = this.value.toUpperCase();
-});
-
-document.getElementById('copyColor1Button').addEventListener('click', function() {
-    var colorCode = document.getElementById('color1Code').textContent;
-    navigator.clipboard.writeText(colorCode);
-    var tickMarkElement = document.getElementById('tickMark1');
-    tickMarkElement.textContent = '✓';
-    setTimeout(function() {
-        tickMarkElement.textContent = '';
-    }, 3000);
-});
-
-<!-- Add event listeners for the new color inputs -->
-
-document.getElementById('hexColor2Input').addEventListener('input', function() {
-    if (!this.value.startsWith('#')) {
-        this.value = '#' + this.value;
-    }
-    randomColor2 = this.value;
-    document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
-    document.getElementById('color2Code').textContent = this.value.toUpperCase();
-});
-
-document.getElementById('copyColor2Button').addEventListener('click', function() {
-    var colorCode = document.getElementById('color2Code').textContent;
-    navigator.clipboard.writeText(colorCode);
-    var tickMarkElement = document.getElementById('tickMark2');
-    tickMarkElement.textContent = '✓';
-    setTimeout(function() {
-        tickMarkElement.textContent = '';
-    }, 3000);
-});
-
+    document.getElementById('randomButton').addEventListener('click', function() {
+        randomColor1 = generateRandomColor();
+        randomColor2 = generateRandomColor();
+        updateColors(randomColor1, randomColor2);
+    });
 
         // Photo Upload and Color Fetching Functionality
         const photoUpload = document.getElementById('photoUpload');
@@ -469,37 +417,6 @@ for (let color of topColors) {
     colorPalette.appendChild(colorElement);
 }	
 });
-// Color Input Event Listeners
-    document.getElementById('color1Input').addEventListener('input', function() {
-        randomColor1 = this.value;
-        document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
-        document.getElementById('hexColor1Input').value = this.value; // Ensure hex input is updated
-        document.getElementById('color1Code').textContent = this.value.toUpperCase();
-    });
-
-    document.getElementById('color2Input').addEventListener('input', function() {
-        randomColor2 = this.value;
-        document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
-        document.getElementById('hexColor2Input').value = this.value; // Ensure hex input is updated
-        document.getElementById('color2Code').textContent = this.value.toUpperCase();
-    });
-
-document.getElementById('randomButton').addEventListener('click', function() {
-    // Generate random colors
-    randomColor1 = '#' + ("000000" + Math.floor(Math.random() * 16777215).toString(16)).slice(-6);
-    randomColor2 = '#' + ("000000" + Math.floor(Math.random() * 16777215).toString(16)).slice(-6);
-
-    // Change the background color
-    document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
-
-    // Update color codes
-    document.getElementById('color1Code').textContent = randomColor1.toUpperCase();
-    document.getElementById('color1Input').value = randomColor1;
-    document.getElementById('hexColor1Input').value = randomColor1;
-    document.getElementById('color2Code').textContent = randomColor2.toUpperCase();
-    document.getElementById('color2Input').value = randomColor2;
-    document.getElementById('hexColor2Input').value = randomColor2;
-});
 
     // Set default colors
     let defaultColor1 = '#8E24AA';
@@ -521,86 +438,6 @@ document.getElementById('randomButton').addEventListener('click', function() {
     // Set initial color picker inputs
     document.getElementById('color1Input').value = defaultColor1;
     document.getElementById('color2Input').value = defaultColor2;
-
-document.getElementById('color1Input').addEventListener('input', function(event) {
-    const color1 = event.target.value;
-    const color2 = document.getElementById('color2Input').value || randomColor2;
-    document.body.style.background = 'linear-gradient(90deg, ' + color1 + ', ' + color2 + ')';
-    document.getElementById('hexColor1Input').value = color1;
-    document.getElementById('color1Code').textContent = color1.toUpperCase();
-});
-
-document.getElementById('color2Input').addEventListener('input', function(event) {
-    const color2 = event.target.value;
-    const color1 = document.getElementById('color1Input').value || randomColor1;
-    document.body.style.background = 'linear-gradient(90deg, ' + color1 + ', ' + color2 + ')';
-    document.getElementById('hexColor2Input').value = color2;
-    document.getElementById('color2Code').textContent = color2.toUpperCase();
-});
-
-    document.getElementById('hexColor1Input').addEventListener('input', function() {
-        if (!this.value.startsWith('#')) {
-            this.value = '#' + this.value;
-        }
-        randomColor1 = this.value;
-        document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
-        document.getElementById('color1Code').textContent = this.value.toUpperCase();
-        document.getElementById('color1Input').value = this.value; // Update color input
-    });
-
-    document.getElementById('hexColor2Input').addEventListener('input', function() {
-        if (!this.value.startsWith('#')) {
-            this.value = '#' + this.value;
-        }
-        randomColor2 = this.value;
-        document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
-        document.getElementById('color2Code').textContent = this.value.toUpperCase();
-        document.getElementById('color2Input').value = this.value; // Update color input
-    });
-
-
-// Function to update background and color pickers
-function updateColors(color1, color2) {
-    document.body.style.background = `linear-gradient(90deg, ${color1}, ${color2})`;
-    document.getElementById('color1Code').textContent = color1.toUpperCase();
-    document.getElementById('color2Code').textContent = color2.toUpperCase();
-    document.getElementById('hexColor1Input').value = color1;
-    document.getElementById('hexColor2Input').value = color2;
-    document.getElementById('color1Input').value = color1;
-    document.getElementById('color2Input').value = color2;
-}
-
-// Set initial colors
-updateColors(defaultColor1, defaultColor2);
-
-// Event listener for color1Input changes
-document.getElementById('color1Input').addEventListener('input', function(event) {
-    const color1 = event.target.value;
-    updateColors(color1, randomColor2);
-});
-
-// Event listener for color2Input changes
-document.getElementById('color2Input').addEventListener('input', function(event) {
-    const color2 = event.target.value;
-    updateColors(randomColor1, color2);
-});
-
-// Event listener for color1Picker changes
-document.getElementById('color1Picker').addEventListener('input', function(event) {
-    randomColor1 = event.target.value;
-    updateColors(randomColor1, randomColor2);
-});
-
-// Event listener for color2Picker changes
-document.getElementById('color2Picker').addEventListener('input', function(event) {
-    randomColor2 = event.target.value;
-    updateColors(randomColor1, randomColor2);
-});
-
-// Event listener for start button
-document.getElementById('startButton').addEventListener('click', function() {
-    updateColors(randomColor1, randomColor2);
-});
 
     </script>
 
