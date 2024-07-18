@@ -558,6 +558,50 @@ document.getElementById('color2Input').addEventListener('input', function(event)
         document.getElementById('color2Input').value = this.value; // Update color input
     });
 
+
+// Function to update background and color pickers
+function updateColors(color1, color2) {
+    document.body.style.background = `linear-gradient(90deg, ${color1}, ${color2})`;
+    document.getElementById('color1Code').textContent = color1.toUpperCase();
+    document.getElementById('color2Code').textContent = color2.toUpperCase();
+    document.getElementById('hexColor1Input').value = color1;
+    document.getElementById('hexColor2Input').value = color2;
+    document.getElementById('color1Input').value = color1;
+    document.getElementById('color2Input').value = color2;
+}
+
+// Set initial colors
+updateColors(defaultColor1, defaultColor2);
+
+// Event listener for color1Input changes
+document.getElementById('color1Input').addEventListener('input', function(event) {
+    const color1 = event.target.value;
+    updateColors(color1, randomColor2);
+});
+
+// Event listener for color2Input changes
+document.getElementById('color2Input').addEventListener('input', function(event) {
+    const color2 = event.target.value;
+    updateColors(randomColor1, color2);
+});
+
+// Event listener for color1Picker changes
+document.getElementById('color1Picker').addEventListener('input', function(event) {
+    randomColor1 = event.target.value;
+    updateColors(randomColor1, randomColor2);
+});
+
+// Event listener for color2Picker changes
+document.getElementById('color2Picker').addEventListener('input', function(event) {
+    randomColor2 = event.target.value;
+    updateColors(randomColor1, randomColor2);
+});
+
+// Event listener for start button
+document.getElementById('startButton').addEventListener('click', function() {
+    updateColors(randomColor1, randomColor2);
+});
+
     </script>
 
 </body>
