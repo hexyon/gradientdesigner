@@ -65,8 +65,7 @@ body {
     box-sizing: border-box;
 }
 
-
-        .colorInput, .copyButton {
+        .colorInput, .copyButton, .colorNameButton {
             border: none;
             border-radius: 50px;
             padding: 10px 20px;
@@ -80,28 +79,18 @@ body {
             outline: none;
             width: 150px;
             text-align: center;
-        }
-
-        .colorNameButton {
-            border: none;
-            border-radius: 50px;
-            padding: 5px 15px;
-            font-size: 16px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #E0E0E0;
-            cursor: pointer;
-            box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            margin-top: 10px;
-            outline: none;
-            width: 200px;
-            height: 60px;
-            text-align: center;
             white-space: normal;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex: 1 0 auto;
+            min-width: 200px;
+            max-width: 200px;
+            margin: 5px;
+            padding: 8px 12px;
+            height: 60px;
+
         }
 
         .copyButton:hover, .colorNameButton:hover {
@@ -167,8 +156,9 @@ body {
     position: relative;
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 10px; /* Add this line */
+    gap: 10px;
 }
 
 @media (max-width: 768px) {
@@ -177,9 +167,17 @@ body {
         font-size: 16px;
     }
 
-    .colorInput, .copyButton {
+.colorContainer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+
+    .colorInput, .copyButton, .colorNameButton {
         font-size: 18px;
         padding: 8px 16px;
+        width: 100%;
+        max-width: none;
     }
 
     #colorSelectionScreen, #photoColors {
@@ -194,11 +192,10 @@ body {
 }
 
 #color1Name, #color2Name {
-    position: absolute; /* Fixes the position relative to the parent container */
-    color: white;
-    font-size: 16px;
+    position: static;
+    width: 100%;
+    text-align: center;
     margin-top: 5px;
-        right: 10%;
 }
 
 .colorContainer {
@@ -404,15 +401,18 @@ fetchColorsButton.addEventListener('click', () => {
     img.crossOrigin = 'Anonymous'; // Enable CORS for cross-origin images
     img.src = photoThumbnail.src;
 
-    img.onload = () => {
-        let topColors = colorThief.getPalette(img, 6).map(rgb => '#' + rgb.map(x => x.toString(16).padStart(2, '0')).join(''));
+    img.onload = async () => {
+        let allColors = colorThief.getPalette(img, 6).map(rgb => '#' + rgb.map(x => x.toString(16).padStart(2, '0')).join(''));
 
         // Filter out colors that are too close to white or black
-        topColors = topColors.filter(color => {
+        let filteredColors = allColors.filter(color => {
             const rgb = color.slice(1).match(/.{2}/g).map(x => parseInt(x, 16));
             const brightness = Math.sqrt(0.299 * Math.pow(rgb[0], 2) + 0.587 * Math.pow(rgb[1], 2) + 0.114 * Math.pow(rgb[2], 2));
             return brightness > 50 && brightness < 200;
-        }).slice(0, 2); // Fetch only two colors
+        });
+
+        // Select top two colors for the gradient
+        let topColors = filteredColors.slice(0, 2);
 
         // Convert colors to HSL and sort by hue
         topColors.sort((a, b) => {
@@ -423,46 +423,55 @@ fetchColorsButton.addEventListener('click', () => {
 
         // Update background gradient and color code display
         document.body.style.background = `linear-gradient(90deg, ${topColors.join(', ')})`;
-        for (let i = 0; i < 2; i++) { // Loop only for two colors
+        for (let i = 0; i < 2; i++) {
             document.getElementById(`color${i + 1}Code`).textContent = topColors[i].toUpperCase();
-
-            // Update hex color inputs with fetched colors
-            document.getElementById(`hexColor${i + 1}Input`).value = topColors[i]; 
+            document.getElementById(`hexColor${i + 1}Input`).value = topColors[i];
         }
 
         // Assign fetched colors to randomColor variables to preserve them
         randomColor1 = topColors[0];
         randomColor2 = topColors[1];
+
+        // Update color names
+        try {
+            const [color1Name, color2Name] = await Promise.all([
+                getColorName(randomColor1),
+                getColorName(randomColor2)
+            ]);
+            
+            document.getElementById('color1Name').textContent = color1Name;
+            document.getElementById('color2Name').textContent = color2Name;
+        } catch (error) {
+            console.error('Error fetching color names:', error);
+            document.getElementById('color1Name').textContent = 'Unknown Color';
+            document.getElementById('color2Name').textContent = 'Unknown Color';
+        }
+
+        // Create color palette
+        let colorPalette = document.getElementById('colorPalette');
+        colorPalette.innerHTML = ''; // Clear existing colors
+        for (let color of allColors) {
+            let colorElement = document.createElement('div');
+            colorElement.style.width = '35px';
+            colorElement.style.height = '35px';
+            colorElement.style.background = color;
+            colorElement.style.borderRadius = '10px';
+            colorElement.style.margin = '5px';
+            colorElement.style.cursor = 'pointer';
+            colorElement.addEventListener('click', () => {
+                navigator.clipboard.writeText(color);
+                colorElement.style.border = '2px solid #ffffff'; // Show tick mark
+                setTimeout(() => {
+                    colorElement.style.border = 'none'; // Hide tick mark after 3 seconds
+                }, 3000);
+            });
+            colorPalette.appendChild(colorElement);
+        }
     };
-
-            // Get the top 6 colors from the uploaded photo
-            let topColors = colorThief.getPalette(img, 6).map(rgb => '#' + rgb.map(x => x.toString(16).padStart(2, '0')).join(''));
-
-// Create color palette
-let colorPalette = document.getElementById('colorPalette');
-colorPalette.innerHTML = ''; // Clear existing colors
-for (let color of topColors) {
-    let colorElement = document.createElement('div');
-    colorElement.style.width = '35px';
-    colorElement.style.height = '35px';
-    colorElement.style.background = color;
-    colorElement.style.borderRadius = '10px'; // Change this line
-    colorElement.style.margin = '5px'; // Add this line
-    colorElement.style.cursor = 'pointer';
-    colorElement.addEventListener('click', () => {
-        navigator.clipboard.writeText(color);
-        colorElement.style.border = '2px solid #ffffff'; // Show tick mark
-        setTimeout(() => {
-            colorElement.style.border = 'none'; // Hide tick mark after 3 seconds
-        }, 3000);
-    });
-    colorPalette.appendChild(colorElement);
-}	
 });
-
     // Set default colors
-    let defaultColor1 = '#8E24AA';
-    let defaultColor2 = '#F50056';
+    let defaultColor1 = '#8e24aa';
+    let defaultColor2 = '#f50056';
     randomColor1 = defaultColor1;
     randomColor2 = defaultColor2;
 
