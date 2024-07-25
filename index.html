@@ -6,42 +6,50 @@
 </head>
     <title>Gradient Designer</title>
     <style>
-body {
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: gradient 0.5s ease infinite;
-    flex-direction: column;
-}
+        body {
+            font-family: 'Roboto', 'Arial', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: gradient 0.5s ease infinite;
+            flex-direction: column;
+            background-color: #f5f5f7;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
 
 #buttonContainer {
     display: flex;
-    flex-direction: row; /* Changed to row for horizontal layout */
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap; /* Added for wrapping on smaller screens */
-    gap: 10px; /* Added for spacing between buttons */
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
-.controlButton {
-    margin: 10px;
-    padding: 15px 30px;
-    font-size: 18px;
-    color: white;
-    background: rgba(0, 0, 0, 0.3);
-    border: 2px solid rgba(0, 0, 0, 0.3);
-    border-radius: 20px;
-    cursor: pointer;
-    outline: none;
-    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
+        .controlButton {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            color: #005BBA;
+            background: #ffffff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
 
 .controlButton:hover {
-    background: rgba(0, 0, 0, 0.5);
+    background-color: #f5f5f7;
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.controlButton:active {
+    background-color: #e5e5e5;
 }
 
 @keyframes gradient {
@@ -51,30 +59,41 @@ body {
 }
 
 #colorSelectionScreen, #photoColors {
-    width: 90%; /* Adjust as needed */
+    width: 90%;
     height: auto; /* Adjust as needed */
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
+    max-width: 800px;
+    background: #ffffff;
+    border-radius: 10px;
     padding: 20px;
     display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
     box-sizing: border-box;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: rgba(255,255,255,0.1);
+
 }
 
-        .colorInput, .copyButton, .colorNameButton {
-            border: none;
-            border-radius: 50px;
-            padding: 10px 20px;
-            font-size: 22px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #E0E0E0;
-            cursor: pointer;
-            box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
+#colorSelectionScreen h3, #photoColors h3 {
+    margin-top: 0;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.colorInput, .copyButton, .colorNameButton {
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 22px;
+    background-color: #f5f5f7;
+    color: #1d1d1f;
+    cursor: pointer;
+    transition: all 0.3s ease;
             margin-top: 10px;
             outline: none;
             width: 150px;
@@ -90,26 +109,49 @@ body {
             margin: 5px;
             padding: 8px 12px;
             height: 60px;
+position: relative;
+}
 
-        }
+.colorInput, .copyButton, .colorNameButton {
+    flex: 1;
+    min-width: 120px;
+    max-width: 200px;
+background-color: #f5f5f7;
+color: #1d1d1f;
+transition: background-color 0.3s ease, color 0.3s ease;
+}
 
-        .copyButton:hover, .colorNameButton:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
+.colorNameButton:hover::after {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0,0,0,0.8);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+}
 
-        .copyButton:active, .colorNameButton:active {
-            background: rgba(255, 255, 255, 0.3);
-        }
+.copyButton:hover, .colorNameButton:hover {
+    background-color: #e5e5e5;
+}
+
+.copyButton:active, .colorNameButton:active {
+    background-color: #d1d1d6;
+}
 
 #tickMark1, #tickMark2 {
-    color: white;
-    font-size: 20px;
+    color: #f5f5f7;
+    font-size: 16px;
 }
 
 #color1Code, #color2Code {
     display: inline-block;
     width: 100%;
     text-align: center;
+    font-weight: 500;
 }
 
 #photoThumbnail {
@@ -117,19 +159,21 @@ body {
     width: 100px;
     height: 100px;
     border-radius: 20px;
+    object-fit: cover;
 }
 
 .colorPicker {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border: none;
-    border-radius: 50%;
+    border-radius: 20%;
     cursor: pointer;
     position: relative;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    flex-shrink: 0; /* Add this line */
+    flex-shrink: 0;
+    overflow: hidden;
 }
 
 #color1Picker {
@@ -156,32 +200,32 @@ body {
     position: relative;
     width: 100%;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     gap: 10px;
 }
 
 @media (max-width: 768px) {
     .controlButton {
-        padding: 10px 20px;
-        font-size: 16px;
+        padding: 8px 16px;
+        font-size: 14px;
     }
 
-.colorContainer {
+    .colorContainer {
         flex-direction: column;
         align-items: stretch;
     }
 
-
     .colorInput, .copyButton, .colorNameButton {
-        font-size: 18px;
+        font-size: 14px;
         padding: 8px 16px;
         width: 100%;
         max-width: none;
+        margin: 5px 0;
     }
 
     #colorSelectionScreen, #photoColors {
-        width: 100%;
+        width: 95%;
         padding: 15px;
     }
 
@@ -198,27 +242,94 @@ body {
     margin-top: 5px;
 }
 
-.colorContainer {
-    justify-content: space-between;
-    margin-top: 20px;
-    position: relative;
-    width: 100%;
+
+#colorPalette {
     display: flex;
-    align-items: center;
-    gap: 10px; /* Added for spacing between elements */
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
 }
+
+#colorPalette div {
+    width: 30px;
+    height: 30px;
+    border-radius: 20px;
+    margin: 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#colorPalette div:hover {
+    transform: scale(1.1);
+}
+
+/* Remove default color buttons */
+#colorPalette .paletteColor {
+    display: none;
+}
+
+#uploadButton, #fetchColorsButton {
+    background-color: #0071e3;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 22px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+#uploadButton:hover, #fetchColorsButton:hover {
+    background-color: #0072ed;
+}
+
+#uploadButton:active, #fetchColorsButton:active {
+    background-color: #006edb;
+}
+
+.controlButton, .colorInput, .copyButton, .colorNameButton {
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+        #colorContainer {
+            width: 90%;
+            height: auto;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 20px;
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        #colorContainer h3 {
+            margin-top: 0;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
 
     </style>
 </head>
 <body>
-<div id="buttonContainer">
-    <button id="startButton" class="controlButton">Start</button>
-    <button id="stopButton" class="controlButton">Stop</button>
-    <button id="colorsButton" class="controlButton">Colors</button> 
-    <button id="randomButton" class="controlButton">Random</button>
-    <button id="downloadButton" class="controlButton">Download</button> 
-</div>
-    <div id="colorSelectionScreen">
+    <div id="buttonContainer">
+        <button id="startButton" class="controlButton">Start</button>
+        <button id="stopButton" class="controlButton">Stop</button>
+        <button id="colorsButton" class="controlButton">Colors</button> 
+        <button id="randomButton" class="controlButton">Random</button>
+        <button id="downloadButton" class="controlButton">Download</button> 
+    </div>
+    <div id="colorContainer">
         <div class="colorContainer">
             <div id="color1Picker" class="colorPicker">
                 <input id="color1Input" type="color">
@@ -237,19 +348,17 @@ body {
             <span id="tickMark2"></span>
             <button id="color2Name" class="colorNameButton">Color Name</button>
         </div>
+        <input type="file" id="photoUpload" accept="image/*" style="display: none;">
+        <button id="uploadButton" class="controlButton">Upload Photo</button>
+        <img id="photoThumbnail" src="" alt="Photo Thumbnail" style="display: none;">
+        <button id="fetchColorsButton" class="controlButton" style="display: none;">Fetch Colors</button>
+        <div id="colorPalette" style="display: flex; justify-content: space-between; margin-top: 20px;">
+            <div class="paletteColor"></div>
+            <div class="paletteColor"></div>
+        </div>
     </div>
-<div id="photoColors">
-    <input type="file" id="photoUpload" accept="image/*" style="display: none;">
-    <button id="uploadButton" class="controlButton">Upload Photo</button>
-    <img id="photoThumbnail" src="" alt="Photo Thumbnail" style="display: none;">
-    <button id="fetchColorsButton" class="controlButton" style="display: none;">Fetch Colors</button>
-    <div id="colorPalette" style="display: flex; justify-content: space-between; margin-top: 20px;">
-        <div class="paletteColor"></div>
-        <div class="paletteColor"></div>
-    </div>
-</div>
 
-<script>
+    <script>
         let intervalId;
         let randomColor1 = '#ffffff';
         let randomColor2 = '#ffffff';
@@ -306,13 +415,10 @@ body {
         link.click();
     });
 
-    document.getElementById('colorsButton').addEventListener('click', function() {
-        let colorSelectionScreen = document.getElementById('colorSelectionScreen');
-        let photoColors = document.getElementById('photoColors');
-        let isDisplayed = colorSelectionScreen.style.display === 'flex';
-        colorSelectionScreen.style.display = isDisplayed ? 'none' : 'flex';
-        photoColors.style.display = isDisplayed ? 'none' : 'flex';
-    });
+        document.getElementById('colorsButton').addEventListener('click', function() {
+            let colorContainer = document.getElementById('colorContainer');
+            colorContainer.style.display = colorContainer.style.display === 'flex' ? 'none' : 'flex';
+        });
 
 document.getElementById('hexColor1Input').addEventListener('input', function() {
     let color = this.value.startsWith('#') ? this.value : '#' + this.value;
