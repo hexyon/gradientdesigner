@@ -3,7 +3,6 @@
 <head>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.min.js"></script>
-</head>
     <title>Gradient Designer</title>
     <style>
         body {
@@ -19,15 +18,15 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-#buttonContainer {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
-}
+        #buttonContainer {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
         .controlButton {
             margin: 10px;
@@ -42,58 +41,57 @@
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-.controlButton:hover {
-    background-color: #f5f5f7;
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
+        .controlButton:hover {
+            background-color: #f5f5f7;
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
 
-.controlButton:active {
-    background-color: #e5e5e5;
-}
+        .controlButton:active {
+            background-color: #e5e5e5;
+        }
 
-@keyframes gradient {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
-}
+        @keyframes gradient {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
 
-#colorSelectionScreen, #photoColors {
-    width: 90%;
-    height: auto; /* Adjust as needed */
-    max-width: 800px;
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 20px;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    padding: 20px;
-    margin-bottom: 20px;
-    background-color: rgba(255,255,255,0.1);
+        #colorSelectionScreen, #photoColors {
+            width: 90%;
+            height: auto;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: rgba(255,255,255,0.1);
+        }
 
-}
+        #colorSelectionScreen h3, #photoColors h3 {
+            margin-top: 0;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
 
-#colorSelectionScreen h3, #photoColors h3 {
-    margin-top: 0;
-    color: white;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-}
-
-.colorInput, .copyButton, .colorNameButton {
-    border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    font-size: 22px;
-    background-color: #f5f5f7;
-    color: #1d1d1f;
-    cursor: pointer;
-    transition: all 0.3s ease;
+        .colorInput, .copyButton, .colorNameButton {
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 22px;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            cursor: pointer;
+            transition: all 0.3s ease;
             margin-top: 10px;
             outline: none;
             width: 150px;
@@ -109,190 +107,202 @@
             margin: 5px;
             padding: 8px 12px;
             height: 60px;
-position: relative;
-}
+            position: relative;
+        }
 
-.colorInput, .copyButton, .colorNameButton {
-    flex: 1;
-    min-width: 120px;
-    max-width: 200px;
-background-color: #f5f5f7;
-color: #1d1d1f;
-transition: background-color 0.3s ease, color 0.3s ease;
-}
+        .colorInput {
+            font-family: inherit;
+            box-sizing: border-box
+        }
 
-.colorNameButton:hover::after {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(0,0,0,0.8);
-    color: white;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 12px;
-    white-space: nowrap;
-}
+        .colorInput::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
 
-.copyButton:hover, .colorNameButton:hover {
-    background-color: #e5e5e5;
-}
+        .colorInput::-webkit-color-swatch {
+            border: none;
+            border-radius: 20px;
+        }
 
-.copyButton:active, .colorNameButton:active {
-    background-color: #d1d1d6;
-}
+        .copyButton, .colorNameButton {
+            flex: 1;
+            min-width: 120px;
+            max-width: 200px;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
 
-#tickMark1, #tickMark2 {
-    color: #f5f5f7;
-    font-size: 16px;
-}
+        .colorNameButton:hover::after {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
 
-#color1Code, #color2Code {
-    display: inline-block;
-    width: 100%;
-    text-align: center;
-    font-weight: 500;
-}
+        .copyButton:hover, .colorNameButton:hover {
+            background-color: #e5e5e5;
+        }
 
-#photoThumbnail {
-    display: none;
-    width: 100px;
-    height: 100px;
-    border-radius: 20px;
-    object-fit: cover;
-}
+        .copyButton:active, .colorNameButton:active {
+            background-color: #d1d1d6;
+        }
 
-.colorPicker {
-    width: 50px;
-    height: 50px;
-    border: none;
-    border-radius: 20%;
-    cursor: pointer;
-    position: relative;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    flex-shrink: 0;
-    overflow: hidden;
-}
+        #tickMark1, #tickMark2 {
+            color: #f5f5f7;
+            font-size: 16px;
+        }
 
-#color1Picker {
-    background-image: url('left-color.png');
-}
+        #color1Code, #color2Code {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            font-weight: 500;
+        }
 
-#color2Picker {
-    background-image: url('right-color.png');
-}
+        #photoThumbnail {
+            display: none;
+            width: 100px;
+            height: 100px;
+            border-radius: 20px;
+            object-fit: cover;
+        }
 
-.colorPicker input[type="color"] {
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    cursor: pointer;
-}
+        .colorPicker {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 20%;
+            cursor: pointer;
+            position: relative;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
 
-.colorContainer {
-    justify-content: space-between;
-    margin-top: 20px;
-    position: relative;
-    width: 100%;
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 10px;
-}
+        #color1Picker {
+            background-image: url('left-color.png');
+        }
 
-@media (max-width: 768px) {
-    .controlButton {
-        padding: 8px 16px;
-        font-size: 14px;
-    }
+        #color2Picker {
+            background-image: url('right-color.png');
+        }
 
-    .colorContainer {
-        flex-direction: column;
-        align-items: stretch;
-    }
+        .colorPicker input[type="color"] {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            cursor: pointer;
+        }
 
-    .colorInput, .copyButton, .colorNameButton {
-        font-size: 14px;
-        padding: 8px 16px;
-        width: 100%;
-        max-width: none;
-        margin: 5px 0;
-    }
+        .colorContainer {
+            justify-content: space-between;
+            margin-top: 20px;
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: 10px;
+        }
 
-    #colorSelectionScreen, #photoColors {
-        width: 95%;
-        padding: 15px;
-    }
+        @media (max-width: 768px) {
+            .controlButton {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
 
-    #photoThumbnail {
-        width: 80px;
-        height: 80px;
-    }
-}
+            .colorContainer {
+                flex-direction: column;
+                align-items: stretch;
+            }
 
-#color1Name, #color2Name {
-    position: static;
-    width: 100%;
-    text-align: center;
-    margin-top: 5px;
-}
+            .colorInput, .copyButton, .colorNameButton {
+                font-size: 14px;
+                padding: 8px 16px;
+                width: 100%;
+                max-width: none;
+                margin: 5px 0;
+            }
 
+            #colorSelectionScreen, #photoColors {
+                width: 95%;
+                padding: 15px;
+            }
 
-#colorPalette {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
+            #photoThumbnail {
+                width: 80px;
+                height: 80px;
+            }
+        }
 
-#colorPalette div {
-    width: 30px;
-    height: 30px;
-    border-radius: 20px;
-    margin: 5px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        #color1Name, #color2Name {
+            position: static;
+            width: 100%;
+            text-align: center;
+            margin-top: 5px;
+        }
 
-#colorPalette div:hover {
-    transform: scale(1.1);
-}
+        #colorPalette {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
 
-/* Remove default color buttons */
-#colorPalette .paletteColor {
-    display: none;
-}
+        #colorPalette div {
+            width: 30px;
+            height: 30px;
+            border-radius: 20px;
+            margin: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-#uploadButton, #fetchColorsButton {
-    background-color: #0071e3;
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-size: 22px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
-}
+        #colorPalette div:hover {
+            transform: scale(1.1);
+        }
 
-#uploadButton:hover, #fetchColorsButton:hover {
-    background-color: #0072ed;
-}
+        #colorPalette .paletteColor {
+            display: none;
+        }
 
-#uploadButton:active, #fetchColorsButton:active {
-    background-color: #006edb;
-}
+        #uploadButton, #fetchColorsButton {
+            background-color: #0071e3;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 22px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
 
-.controlButton, .colorInput, .copyButton, .colorNameButton {
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+        #uploadButton:hover, #fetchColorsButton:hover {
+            background-color: #0072ed;
+        }
+
+        #uploadButton:active, #fetchColorsButton:active {
+            background-color: #006edb;
+        }
+
+        .controlButton, .colorInput, .copyButton, .colorNameButton {
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
         #colorContainer {
             width: 90%;
@@ -318,7 +328,6 @@ transition: background-color 0.3s ease, color 0.3s ease;
             color: white;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
-
     </style>
 </head>
 <body>
@@ -363,99 +372,98 @@ transition: background-color 0.3s ease, color 0.3s ease;
         let randomColor1 = '#ffffff';
         let randomColor2 = '#ffffff';
 
-    function generateRandomColor() {
-        return '#' + ("000000" + Math.floor(Math.random() * 16777215).toString(16)).slice(-6);
-    }
+        function generateRandomColor() {
+            return '#' + ("000000" + Math.floor(Math.random() * 16777215).toString(16)).slice(-6);
+        }
 
-    function updateColors(color1, color2) {
-        document.body.style.background = `linear-gradient(90deg, ${color1}, ${color2})`;
-        document.getElementById('color1Code').textContent = color1.toUpperCase();
-        document.getElementById('color2Code').textContent = color2.toUpperCase();
-        document.getElementById('hexColor1Input').value = color1;
-        document.getElementById('hexColor2Input').value = color2;
-        document.getElementById('color1Input').value = color1;
-        document.getElementById('color2Input').value = color2;
-    }
+        function updateColors(color1, color2) {
+            document.body.style.background = `linear-gradient(90deg, ${color1}, ${color2})`;
+            document.getElementById('color1Code').textContent = color1.toUpperCase();
+            document.getElementById('color2Code').textContent = color2.toUpperCase();
+            document.getElementById('hexColor1Input').value = color1;
+            document.getElementById('hexColor2Input').value = color2;
+            document.getElementById('color1Input').value = color1;
+            document.getElementById('color2Input').value = color2;
+        }
 
-    function copyColor(colorCode, tickMarkId) {
-        navigator.clipboard.writeText(colorCode);
-        let tickMarkElement = document.getElementById(tickMarkId);
-        tickMarkElement.textContent = '✓';
-        setTimeout(() => {
-            tickMarkElement.textContent = '';
-        }, 3000);
-    }
+        function copyColor(colorCode, tickMarkId) {
+            navigator.clipboard.writeText(colorCode);
+            let tickMarkElement = document.getElementById(tickMarkId);
+            tickMarkElement.textContent = '✓';
+            setTimeout(() => {
+                tickMarkElement.textContent = '';
+            }, 3000);
+        }
 
-    document.getElementById('startButton').addEventListener('click', function() {
-        if (intervalId) clearInterval(intervalId);
-        intervalId = setInterval(() => {
-            randomColor1 = generateRandomColor();
-            randomColor2 = generateRandomColor();
-            updateColors(randomColor1, randomColor2);
-        }, 300);
-    });
+        document.getElementById('startButton').addEventListener('click', function() {
+            if (intervalId) clearInterval(intervalId);
+            intervalId = setInterval(() => {
+                randomColor1 = generateRandomColor();
+                randomColor2 = generateRandomColor();
+                updateColors(randomColor1, randomColor2);
+            }, 300);
+        });
 
-    document.getElementById('stopButton').addEventListener('click', function() {
-        if (intervalId) clearInterval(intervalId);
-    });
+        document.getElementById('stopButton').addEventListener('click', function() {
+            if (intervalId) clearInterval(intervalId);
+        });
 
-    document.getElementById('downloadButton').addEventListener('click', function() {
-        let canvas = document.createElement('canvas');
-        canvas.width = 1920;
-        canvas.height = 1080;
-        let context = canvas.getContext('2d');
-        let gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
-        gradient.addColorStop(0, randomColor1);
-        gradient.addColorStop(1, randomColor2);
-        context.fillStyle = gradient;
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        let link = document.createElement('a');
-        link.download = 'background.png';
-        link.href = canvas.toDataURL();
-        link.click();
-    });
+        document.getElementById('downloadButton').addEventListener('click', function() {
+            let canvas = document.createElement('canvas');
+            canvas.width = 1920;
+            canvas.height = 1080;
+            let context = canvas.getContext('2d');
+            let gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, randomColor1);
+            gradient.addColorStop(1, randomColor2);
+            context.fillStyle = gradient;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            let link = document.createElement('a');
+            link.download = 'background.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
 
         document.getElementById('colorsButton').addEventListener('click', function() {
             let colorContainer = document.getElementById('colorContainer');
             colorContainer.style.display = colorContainer.style.display === 'flex' ? 'none' : 'flex';
         });
 
-document.getElementById('hexColor1Input').addEventListener('input', function() {
-    let color = this.value.startsWith('#') ? this.value : '#' + this.value;
-    randomColor1 = color;
-    updateColors(randomColor1, randomColor2);
-});
-
+        document.getElementById('hexColor1Input').addEventListener('input', function() {
+            let color = this.value.startsWith('#') ? this.value : '#' + this.value;
+            randomColor1 = color;
+            updateColors(randomColor1, randomColor2);
+        });
 
 document.getElementById('hexColor2Input').addEventListener('input', function() {
-    let color = this.value.startsWith('#') ? this.value : '#' + this.value;
-    randomColor2 = color;
-    updateColors(randomColor1, randomColor2);
-});
+            let color = this.value.startsWith('#') ? this.value : '#' + this.value;
+            randomColor2 = color;
+            updateColors(randomColor1, randomColor2);
+        });
 
-document.getElementById('color1Input').addEventListener('input', function() {
-    randomColor1 = this.value;
-    updateColors(randomColor1, randomColor2);
-});
+        document.getElementById('color1Input').addEventListener('input', function() {
+            randomColor1 = this.value;
+            updateColors(randomColor1, randomColor2);
+        });
 
-document.getElementById('color2Input').addEventListener('input', function() {
-    randomColor2 = this.value;
-    updateColors(randomColor1, randomColor2);
-});
+        document.getElementById('color2Input').addEventListener('input', function() {
+            randomColor2 = this.value;
+            updateColors(randomColor1, randomColor2);
+        });
 
-    document.getElementById('copyColor1Button').addEventListener('click', function() {
-        copyColor(randomColor1, 'tickMark1');
-    });
+        document.getElementById('copyColor1Button').addEventListener('click', function() {
+            copyColor(randomColor1, 'tickMark1');
+        });
 
-    document.getElementById('copyColor2Button').addEventListener('click', function() {
-        copyColor(randomColor2, 'tickMark2');
-    });
+        document.getElementById('copyColor2Button').addEventListener('click', function() {
+            copyColor(randomColor2, 'tickMark2');
+        });
 
-    document.getElementById('randomButton').addEventListener('click', function() {
-        randomColor1 = generateRandomColor();
-        randomColor2 = generateRandomColor();
-        updateColors(randomColor1, randomColor2);
-    });
+        document.getElementById('randomButton').addEventListener('click', function() {
+            randomColor1 = generateRandomColor();
+            randomColor2 = generateRandomColor();
+            updateColors(randomColor1, randomColor2);
+        });
 
         // Photo Upload and Color Fetching Functionality
         const photoUpload = document.getElementById('photoUpload');
@@ -481,208 +489,144 @@ document.getElementById('color2Input').addEventListener('input', function() {
             }
         });
 
-function rgbToHsl(r, g, b) {
-    r /= 255, g /= 255, b /= 255;
-    let max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h, s, l = (max + min) / 2;
+        function rgbToHsl(r, g, b) {
+            r /= 255, g /= 255, b /= 255;
+            let max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
 
-    if(max == min){
-        h = s = 0; // achromatic
-    } else {
-        let d = max - min;
-        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-        switch(max){
-            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-            case g: h = (b - r) / d + 2; break;
-            case b: h = (r - g) / d + 4; break;
+            if(max == min){
+                h = s = 0; // achromatic
+            } else {
+                let d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch(max){
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+
+            return [h, s, l];
         }
-        h /= 6;
-    }
 
-    return [h, s, l];
-}
+        fetchColorsButton.addEventListener('click', () => {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous'; // Enable CORS for cross-origin images
+            img.src = photoThumbnail.src;
 
-fetchColorsButton.addEventListener('click', () => {
-    const img = new Image();
-    img.crossOrigin = 'Anonymous'; // Enable CORS for cross-origin images
-    img.src = photoThumbnail.src;
+            img.onload = async () => {
+                let allColors = colorThief.getPalette(img, 6).map(rgb => '#' + rgb.map(x => x.toString(16).padStart(2, '0')).join(''));
 
-    img.onload = async () => {
-        let allColors = colorThief.getPalette(img, 6).map(rgb => '#' + rgb.map(x => x.toString(16).padStart(2, '0')).join(''));
+                // Filter out colors that are too close to white or black
+                let filteredColors = allColors.filter(color => {
+                    const rgb = color.slice(1).match(/.{2}/g).map(x => parseInt(x, 16));
+                    const brightness = Math.sqrt(0.299 * Math.pow(rgb[0], 2) + 0.587 * Math.pow(rgb[1], 2) + 0.114 * Math.pow(rgb[2], 2));
+                    return brightness > 50 && brightness < 200;
+                });
 
-        // Filter out colors that are too close to white or black
-        let filteredColors = allColors.filter(color => {
-            const rgb = color.slice(1).match(/.{2}/g).map(x => parseInt(x, 16));
-            const brightness = Math.sqrt(0.299 * Math.pow(rgb[0], 2) + 0.587 * Math.pow(rgb[1], 2) + 0.114 * Math.pow(rgb[2], 2));
-            return brightness > 50 && brightness < 200;
+                // Select top two colors for the gradient
+                let topColors = filteredColors.slice(0, 2);
+
+                // Convert colors to HSL and sort by hue
+                topColors.sort((a, b) => {
+                    const hslA = rgbToHsl(...a.slice(1).match(/.{2}/g).map(x => parseInt(x, 16)));
+                    const hslB = rgbToHsl(...b.slice(1).match(/.{2}/g).map(x => parseInt(x, 16)));
+                    return hslA[0] - hslB[0];
+                });
+
+                // Update background gradient and color code display
+                document.body.style.background = `linear-gradient(90deg, ${topColors.join(', ')})`;
+                for (let i = 0; i < 2; i++) {
+                    document.getElementById(`color${i + 1}Code`).textContent = topColors[i].toUpperCase();
+                    document.getElementById(`hexColor${i + 1}Input`).value = topColors[i];
+                }
+
+                // Assign fetched colors to randomColor variables to preserve them
+                randomColor1 = topColors[0];
+                randomColor2 = topColors[1];
+
+                // Update color names
+                try {
+                    const [color1Name, color2Name] = await Promise.all([
+                        getColorName(randomColor1),
+                        getColorName(randomColor2)
+                    ]);
+                    
+                    document.getElementById('color1Name').textContent = color1Name;
+                    document.getElementById('color2Name').textContent = color2Name;
+                } catch (error) {
+                    console.error('Error fetching color names:', error);
+                    document.getElementById('color1Name').textContent = 'Unknown Color';
+                    document.getElementById('color2Name').textContent = 'Unknown Color';
+                }
+
+                // Create color palette
+                let colorPalette = document.getElementById('colorPalette');
+                colorPalette.innerHTML = ''; // Clear existing colors
+                for (let color of allColors) {
+                    let colorElement = document.createElement('div');
+                    colorElement.style.width = '35px';
+                    colorElement.style.height = '35px';
+                    colorElement.style.background = color;
+                    colorElement.style.borderRadius = '10px';
+                    colorElement.style.margin = '5px';
+                    colorElement.style.cursor = 'pointer';
+                    colorElement.addEventListener('click', () => {
+                        navigator.clipboard.writeText(color);
+                        colorElement.style.border = '2px solid #ffffff'; // Show tick mark
+                        setTimeout(() => {
+                            colorElement.style.border = 'none'; // Hide tick mark after 3 seconds
+                        }, 3000);
+                    });
+                    colorPalette.appendChild(colorElement);
+                }
+            };
         });
 
-        // Select top two colors for the gradient
-        let topColors = filteredColors.slice(0, 2);
+        // Set default colors
+        let defaultColor1 = '#8e24aa';
+        let defaultColor2 = '#f50056';
+        randomColor1 = defaultColor1;
+        randomColor2 = defaultColor2;
 
-        // Convert colors to HSL and sort by hue
-        topColors.sort((a, b) => {
-            const hslA = rgbToHsl(...a.slice(1).match(/.{2}/g).map(x => parseInt(x, 16)));
-            const hslB = rgbToHsl(...b.slice(1).match(/.{2}/g).map(x => parseInt(x, 16)));
-            return hslA[0] - hslB[0];
-        });
+        // Set initial background
+        document.body.style.background = 'linear-gradient(90deg, ' + defaultColor1 + ', ' + defaultColor2 + ')';
 
-        // Update background gradient and color code display
-        document.body.style.background = `linear-gradient(90deg, ${topColors.join(', ')})`;
-        for (let i = 0; i < 2; i++) {
-            document.getElementById(`color${i + 1}Code`).textContent = topColors[i].toUpperCase();
-            document.getElementById(`hexColor${i + 1}Input`).value = topColors[i];
+        // Set initial color codes
+        document.getElementById('color1Code').textContent = defaultColor1.toUpperCase();
+        document.getElementById('color2Code').textContent = defaultColor2.toUpperCase();
+
+        // Set initial hex color inputs
+        document.getElementById('hexColor1Input').value = defaultColor1;
+        document.getElementById('hexColor2Input').value = defaultColor2;
+
+        // Set initial color picker inputs
+        document.getElementById('color1Input').value = defaultColor1;
+        document.getElementById('color2Input').value = defaultColor2;
+
+        async function getColorName(hex) {
+            try {
+                const response = await fetch(`https://www.thecolorapi.com/id?hex=${hex.replace('#', '')}`);
+                const data = await response.json();
+                return data.name.value;
+            } catch (error) {
+                console.error('Error fetching color name:', error);
+                return 'Unknown Color';
+            }
         }
 
-        // Assign fetched colors to randomColor variables to preserve them
-        randomColor1 = topColors[0];
-        randomColor2 = topColors[1];
-
-        // Update color names
-        try {
-            const [color1Name, color2Name] = await Promise.all([
-                getColorName(randomColor1),
-                getColorName(randomColor2)
-            ]);
-            
-            document.getElementById('color1Name').textContent = color1Name;
-            document.getElementById('color2Name').textContent = color2Name;
-        } catch (error) {
-            console.error('Error fetching color names:', error);
-            document.getElementById('color1Name').textContent = 'Unknown Color';
-            document.getElementById('color2Name').textContent = 'Unknown Color';
+        function updateColorCodes(color1, color2) {
+            // Update the color codes immediately
+            document.getElementById('color1Code').textContent = color1.toUpperCase();
+            document.getElementById('color2Code').textContent = color2.toUpperCase();
+            document.getElementById('hexColor1Input').value = color1;
+            document.getElementById('hexColor2Input').value = color2;
+            document.getElementById('color1Input').value = color1;
+            document.getElementById('color2Input').value = color2;
         }
 
-        // Create color palette
-        let colorPalette = document.getElementById('colorPalette');
-        colorPalette.innerHTML = ''; // Clear existing colors
-        for (let color of allColors) {
-            let colorElement = document.createElement('div');
-            colorElement.style.width = '35px';
-            colorElement.style.height = '35px';
-            colorElement.style.background = color;
-            colorElement.style.borderRadius = '10px';
-            colorElement.style.margin = '5px';
-            colorElement.style.cursor = 'pointer';
-            colorElement.addEventListener('click', () => {
-                navigator.clipboard.writeText(color);
-                colorElement.style.border = '2px solid #ffffff'; // Show tick mark
-                setTimeout(() => {
-                    colorElement.style.border = 'none'; // Hide tick mark after 3 seconds
-                }, 3000);
-            });
-            colorPalette.appendChild(colorElement);
-        }
-    };
-});
-    // Set default colors
-    let defaultColor1 = '#8e24aa';
-    let defaultColor2 = '#f50056';
-    randomColor1 = defaultColor1;
-    randomColor2 = defaultColor2;
-
-    // Set initial background
-    document.body.style.background = 'linear-gradient(90deg, ' + defaultColor1 + ', ' + defaultColor2 + ')';
-
-    // Set initial color codes
-    document.getElementById('color1Code').textContent = defaultColor1.toUpperCase();
-    document.getElementById('color2Code').textContent = defaultColor2.toUpperCase();
-
-    // Set initial hex color inputs
-    document.getElementById('hexColor1Input').value = defaultColor1;
-    document.getElementById('hexColor2Input').value = defaultColor2;
-
-    // Set initial color picker inputs
-    document.getElementById('color1Input').value = defaultColor1;
-    document.getElementById('color2Input').value = defaultColor2;
-
-async function getColorName(hex) {
-    try {
-        const response = await fetch(`https://www.thecolorapi.com/id?hex=${hex.replace('#', '')}`);
-        const data = await response.json();
-        return data.name.value;
-    } catch (error) {
-        console.error('Error fetching color name:', error);
-        return 'Unknown Color';
-    }
-}
-
-function updateColorCodes(color1, color2) {
-    // Update the color codes immediately
-    document.getElementById('color1Code').textContent = color1.toUpperCase();
-    document.getElementById('color2Code').textContent = color2.toUpperCase();
-    document.getElementById('hexColor1Input').value = color1;
-    document.getElementById('hexColor2Input').value = color2;
-    document.getElementById('color1Input').value = color1;
-    document.getElementById('color2Input').value = color2;
-}
-
-async function updateColors(color1, color2) {
-    // Update background gradient
-    document.body.style.background = `linear-gradient(90deg, ${color1}, ${color2})`;
-
-    // Update color codes
-    updateColorCodes(color1, color2);
-    
-    // Fetch and display color names asynchronously
-    try {
-        const color1Name = await getColorName(color1);
-        const color2Name = await getColorName(color2);
-        
-        document.getElementById('color1Name').textContent = color1Name;
-        document.getElementById('color2Name').textContent = color2Name;
-    } catch (error) {
-        console.error('Error fetching color names:', error);
-        document.getElementById('color1Name').textContent = 'Unknown Color';
-        document.getElementById('color2Name').textContent = 'Unknown Color';
-    }
-}
-
-// Event listeners
-document.getElementById('color1Input').addEventListener('input', function() {
-    randomColor1 = this.value;
-    updateColors(randomColor1, randomColor2);
-});
-
-document.getElementById('color2Input').addEventListener('input', function() {
-    randomColor2 = this.value;
-    updateColors(randomColor1, randomColor2);
-});
-
-document.getElementById('hexColor1Input').addEventListener('input', function() {
-    let color = this.value.startsWith('#') ? this.value : '#' + this.value;
-    randomColor1 = color;
-    updateColors(randomColor1, randomColor2);
-});
-
-document.getElementById('hexColor2Input').addEventListener('input', function() {
-    let color = this.value.startsWith('#') ? this.value : '#' + this.value;
-    randomColor2 = color;
-    updateColors(randomColor1, randomColor2);
-});
-
-
-    let colorNameUpdateTimeout;
-
-    async function getColorName(hex) {
-        try {
-            const response = await fetch(`https://www.thecolorapi.com/id?hex=${hex.replace('#', '')}`);
-            const data = await response.json();
-            return data.name.value;
-        } catch (error) {
-            console.error('Error fetching color name:', error);
-            return 'Unknown Color';
-        }
-    }
-
-    function updateColorCodes(color1, color2) {
-        document.getElementById('color1Code').textContent = color1.toUpperCase();
-        document.getElementById('color2Code').textContent = color2.toUpperCase();
-        document.getElementById('hexColor1Input').value = color1;
-        document.getElementById('hexColor2Input').value = color2;
-        document.getElementById('color1Input').value = color1;
-        document.getElementById('color2Input').value = color2;
-    }
+        let colorNameUpdateTimeout;
 
         async function updateColors(color1, color2) {
             // Update background gradient and color codes immediately
@@ -710,18 +654,16 @@ document.getElementById('hexColor2Input').addEventListener('input', function() {
             }, 300); // Wait for 300ms before updating color names
         }
 
-    // Update event listeners for color inputs
-    document.getElementById('color1Input').addEventListener('change', function() {
-        randomColor1 = this.value;
-        updateColors(randomColor1, randomColor2);
-    });
+        // Update event listeners for color inputs
+        document.getElementById('color1Input').addEventListener('change', function() {
+            randomColor1 = this.value;
+            updateColors(randomColor1, randomColor2);
+        });
 
-    document.getElementById('color2Input').addEventListener('change', function() {
-        randomColor2 = this.value;
-        updateColors(randomColor1, randomColor2);
-    });
-
+        document.getElementById('color2Input').addEventListener('change', function() {
+            randomColor2 = this.value;
+            updateColors(randomColor1, randomColor2);
+        });
     </script>
-
 </body>
 </html>
