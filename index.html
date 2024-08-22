@@ -615,12 +615,26 @@ async function getColorName(hex) {
         const colorAPIData = await colorAPIResponse.json();
         const colorNameFinderData = await colorNameFinderResponse.json();
 
+
+        const sanitizeName = (name) => {
+            return name
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '') 
+                .replace(/[^\u0000-\u024F]/g, '') 
+                .normalize('NFC') 
+                .trim()
+                .replace(/\s+/g, ' ');
+        };
+
         // Combine and prioritize color names
         const colorNames = [
             colorNameFinderData.colors[0]?.name,
             colorAPIData.name.value,
             colorNameFinderData.colors[0]?.neutralName
-        ].filter(Boolean);
+        ]
+            .filter(Boolean)
+            .map(sanitizeName)
+            .filter(name => name.length > 0);
 
         // Return the first unique color name, or "Unknown Color" if none are available
         return colorNames.find((name, index, self) => self.indexOf(name) === index) || "Unknown Color";
