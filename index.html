@@ -605,16 +605,30 @@ document.getElementById('hexColor2Input').addEventListener('input', function() {
         document.getElementById('color1Input').value = defaultColor1;
         document.getElementById('color2Input').value = defaultColor2;
 
-        async function getColorName(hex) {
-            try {
-                const response = await fetch(`https://www.thecolorapi.com/id?hex=${hex.replace('#', '')}`);
-                const data = await response.json();
-                return data.name.value;
-            } catch (error) {
-                console.error('Error fetching color name:', error);
-                return 'Unknown Color';
-            }
-        }
+async function getColorName(hex) {
+    try {
+        const [colorAPIResponse, colorNameFinderResponse] = await Promise.all([
+            fetch(`https://www.thecolorapi.com/id?hex=${hex.replace('#', '')}`),
+            fetch(`https://api.color.pizza/v1/${hex.replace('#', '')}`)
+        ]);
+
+        const colorAPIData = await colorAPIResponse.json();
+        const colorNameFinderData = await colorNameFinderResponse.json();
+
+        // Combine and prioritize color names
+        const colorNames = [
+            colorNameFinderData.colors[0]?.name,
+            colorAPIData.name.value,
+            colorNameFinderData.colors[0]?.neutralName
+        ].filter(Boolean);
+
+        // Return the first unique color name, or "Unknown Color" if none are available
+        return colorNames.find((name, index, self) => self.indexOf(name) === index) || "Unknown Color";
+    } catch (error) {
+        console.error('Error fetching color names:', error);
+        return 'Unknown Color';
+    }
+}
 
         function updateColorCodes(color1, color2) {
             // Update the color codes immediately
