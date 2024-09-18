@@ -283,17 +283,34 @@
         }
 
         #colorPalette div {
-            width: 30px;
-            height: 30px;
-            border-radius: 20px;
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
             margin: 5px;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         #colorPalette div:hover {
             transform: scale(1.1);
+        }
+
+        #colorPalette div::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #colorPalette div.copied::after {
+            opacity: 1;
         }
 
         #colorPalette .paletteColor {
@@ -533,7 +550,7 @@ document.getElementById('hexColor2Input').addEventListener('input', function() {
 
         fetchColorsButton.addEventListener('click', () => {
             const img = new Image();
-            img.crossOrigin = 'Anonymous'; // Enable CORS for cross-origin images
+            img.crossOrigin = 'Anonymous';
             img.src = photoThumbnail.src;
 
             img.onload = async () => {
@@ -587,18 +604,13 @@ document.getElementById('hexColor2Input').addEventListener('input', function() {
                 colorPalette.innerHTML = ''; // Clear existing colors
                 for (let color of allColors) {
                     let colorElement = document.createElement('div');
-                    colorElement.style.width = '35px';
-                    colorElement.style.height = '35px';
                     colorElement.style.background = color;
-                    colorElement.style.borderRadius = '10px';
-                    colorElement.style.margin = '5px';
-                    colorElement.style.cursor = 'pointer';
                     colorElement.addEventListener('click', () => {
                         navigator.clipboard.writeText(color);
-                        colorElement.style.border = '2px solid #ffffff'; // Show tick mark
+                        colorElement.classList.add('copied');
                         setTimeout(() => {
-                            colorElement.style.border = 'none'; // Hide tick mark after 3 seconds
-                        }, 3000);
+                            colorElement.classList.remove('copied');
+                        }, 1000);
                     });
                     colorPalette.appendChild(colorElement);
                 }
