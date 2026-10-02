@@ -41,7 +41,6 @@
       justify-content: center;
       gap: 16px;
       padding: 32px 20px;
-      transition: background 0.3s ease;
     }
 
     /* ── Canvas Preview ── */
@@ -49,8 +48,8 @@
       width: min(94vw, 960px);
       height: 300px;
       border-radius: var(--radius);
-      transition: background 0.25s ease;
       flex-shrink: 0;
+      display: block;
     }
 
     /* ── Panel ── */
@@ -103,7 +102,7 @@
 
     /* ── Color Rows ── */
     #colorPanel {
-      border-top: 1px solid var(--border);
+      border-top: 1px solid rgba(0,0,0,0.12);
     }
 
     .color-row {
@@ -114,7 +113,7 @@
     }
 
     .color-row + .color-row {
-      border-top: 1px solid var(--border);
+      border-top: 1px solid rgba(0,0,0,0.12);
     }
 
     /* Swatch */
@@ -189,13 +188,15 @@
 
     /* ── Photo section ── */
     #photoSection {
-      border-top: 1px solid var(--border);
-      padding: 16px 18px;
+      border-top: 1px solid rgba(0,0,0,0.12);
+      padding: 0 0 0 18px;
+      min-height: 72px;
       display: flex;
-      align-items: center;
+      align-items: stretch;
       gap: 14px;
-      flex-wrap: wrap;
     }
+    #photoSection > .btn,
+    #photoSection > #photoThumbnail { align-self: center; }
 
     #photoThumbnail {
       width: 56px;
@@ -208,21 +209,22 @@
 
     #colorPalette {
       display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      flex: 1;
+      gap: 0;
+      flex: 0 1 50%;
+      margin-left: auto;
+      min-width: 0;
     }
 
     .palette-swatch {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
+      flex: 1;
+      min-width: 0;
+      border-radius: 0;
       cursor: pointer;
-      border: 1px solid rgba(0,0,0,0.08);
-      transition: transform var(--transition), box-shadow var(--transition);
+      border: none;
+      transition: filter var(--transition);
       position: relative;
     }
-    .palette-swatch:hover { transform: scale(1.12); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .palette-swatch:hover { filter: brightness(1.12); }
     .palette-swatch.copied::after {
       content: '✓';
       position: absolute;
@@ -248,7 +250,7 @@
 <body>
 
   <!-- Live gradient preview -->
-  <div id="gradientPreview"></div>
+  <canvas id="gradientPreview"></canvas>
 
   <!-- Main panel -->
   <div class="panel">
@@ -305,7 +307,7 @@
   let randomColor1 = '#d5cadd';
   let randomColor2 = '#6a80a4';
 
-  const preview    = document.getElementById('gradientPreview');
+  const canvas     = document.getElementById('gradientPreview');
   const swatch1    = document.getElementById('swatch1');
   const swatch2    = document.getElementById('swatch2');
   const hex1       = document.getElementById('hexColor1Input');
@@ -315,10 +317,82 @@
   const cp1        = document.getElementById('color1Input');
   const cp2        = document.getElementById('color2Input');
 
+  // Animation state
+  let animFromColors = ['#d5cadd', '#6a80a4'];
+  let animToColors   = ['#d5cadd', '#6a80a4'];
+  let animStart      = null;
+  let animRafId      = null;
+  const ANIM_DURATION = 250; // ms
+
+  // RGB interpolation helpers
+  function hexToRgb(hex) {
+    const h = hex.replace('#', '');
+    return [
+      parseInt(h.slice(0, 2), 16),
+      parseInt(h.slice(2, 4), 16),
+      parseInt(h.slice(4, 6), 16)
+    ];
+  }
+
+  function rgbToHex(r, g, b) {
+    return '#' + [r, g, b].map(v => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, '0')).join('');
+  }
+
+  function lerpColor(from, to, t) {
+    const f = hexToRgb(from);
+    const e = hexToRgb(to);
+    return rgbToHex(
+      f[0] + (e[0] - f[0]) * t,
+      f[1] + (e[1] - f[1]) * t,
+      f[2] + (e[2] - f[2]) * t
+    );
+  }
+
+  // Canvas rendering
+  canvas.width = 1920;
+  canvas.height = 1080;
+
+  function drawGradient(c1, c2) {
+    const ctx = canvas.getContext('2d');
+    const g = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    g.addColorStop(0, c1);
+    g.addColorStop(1, c2);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  // Animation loop
+  function startAnimation(fromColors, toColors) {
+    animFromColors = fromColors.slice();
+    animToColors   = toColors.slice();
+    animStart      = null;
+    if (animRafId) cancelAnimationFrame(animRafId);
+    animRafId = requestAnimationFrame(animFrame);
+  }
+
+  function animFrame(ts) {
+    if (animStart === null) animStart = ts;
+    const elapsed = ts - animStart;
+    const t = Math.min(elapsed / ANIM_DURATION, 1);
+
+    const interpColors = animToColors.map((_, i) =>
+      lerpColor(animFromColors[i] || animToColors[i], animToColors[i], t)
+    );
+
+    drawGradient(interpColors[0], interpColors[1]);
+
+    if (t < 1) {
+      animRafId = requestAnimationFrame(animFrame);
+    } else {
+      animRafId = null;
+    }
+  }
+
   function applyGradient(c1, c2) {
-    const g = `linear-gradient(120deg, ${c1}, ${c2})`;
-    document.body.style.background = g;
-    preview.style.background = g;
+    const prevColors = [randomColor1, randomColor2];
+    randomColor1 = c1;
+    randomColor2 = c2;
+    startAnimation(prevColors, [c1, c2]);
   }
 
   function syncSwatches(c1, c2) {
@@ -331,7 +405,6 @@
 
   let nameTimeout;
   async function updateColors(c1, c2) {
-    randomColor1 = c1; randomColor2 = c2;
     applyGradient(c1, c2);
     syncSwatches(c1, c2);
     clearTimeout(nameTimeout);
@@ -363,14 +436,6 @@
   });
 
   document.getElementById('downloadButton').addEventListener('click', () => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 1920; canvas.height = 1080;
-    const ctx = canvas.getContext('2d');
-    const g = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-    g.addColorStop(0, randomColor1);
-    g.addColorStop(1, randomColor2);
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
     const a = document.createElement('a');
     a.download = 'gradient.png';
     a.href = canvas.toDataURL();
